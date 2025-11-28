@@ -90,6 +90,7 @@ export const generarPDF = () => {
       span.style.fontWeight = estiloCampo.fontWeight;
       span.style.color = estiloCampo.color;
       span.style.lineHeight = estiloCampo.lineHeight;
+      span.style.textAlign = estiloCampo.textAlign;
       span.style.padding = "0 6px";
       span.style.margin = "0 4px";
 
