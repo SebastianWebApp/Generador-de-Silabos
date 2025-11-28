@@ -1,4 +1,4 @@
-# Prueba Elementos
+# Generador de Silabos
 
 ## Descripción
 
@@ -66,6 +66,36 @@ npm install
 - Cambia colores y bordes desde el panel de personalización.
 - Agrega nuevos tipos de campo editando `Elementos.tsx`.
 
-## Licencia
+## Cómo probar y generar la aplicación
 
-MIT
+### 1. Ejecutar en Electron (modo desarrollo)
+
+Puedes iniciar la aplicación en modo desarrollo usando Electron con el siguiente comando:
+
+```powershell
+npm run electron
+```
+
+Esto abrirá la app en una ventana de Electron.
+
+### 2. Ejecutar en modo preview (Vite)
+
+Para ver la aplicación en modo preview (servidor local de Vite):
+
+```powershell
+npm run preview
+```
+
+Esto iniciará un servidor local y mostrará la app en el navegador.
+
+### 3. Generar el programa de escritorio (build)
+
+Para crear el instalador y los archivos ejecutables de la app de escritorio, ejecuta:
+
+```powershell
+npm run dist
+```
+
+> **Importante:** Este comando debe ejecutarse desde el panel de terminal con permisos de administrador para que la generación y escritura de archivos en la carpeta `release/` se realice correctamente.
+
+El instalador y los archivos generados estarán en la carpeta `release/`.

@@ -365,24 +365,19 @@ function useMenu() {
     setCopiar_filas(!copiar_filas);
 
     if (!copiar_filas) {
-      const opcion = prompt(
-        "¿Dónde desea copiar el elemento?\n1 = Al final\n2 = Después del elemento seleccionado",
-        "1"
+      // Pregunta simple usando confirm
+      const alFinal = window.confirm(
+        "¿Desea copiar el elemento al FINAL?\n\n" +
+          "Aceptar = Copiar al final\n" +
+          "Cancelar = Copiar después del elemento seleccionado"
       );
 
-      switch (opcion) {
-        case "1":
-          setCopiar_final(true);
-          alert("Seleccione las filas a copiar");
-
-          break;
-        case "2":
-          setCopiar_final(false);
-          alert("Seleccione las filas a copiar");
-
-          break;
-        default:
-          handleAlerta("Operación cancelada o opción inválida");
+      if (alFinal) {
+        setCopiar_final(true);
+        window.confirm("Seleccione las filas a copiar");
+      } else {
+        setCopiar_final(false);
+        window.confirm("Seleccione las filas a copiar");
       }
     }
   };

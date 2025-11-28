@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+release
+release/Generador de Sílabos Setup 0.0.0.exe
 
 # Editor directories and files
 .vscode/*
