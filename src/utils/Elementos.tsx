@@ -280,19 +280,28 @@ export function SelectComponent(props: Props) {
     elementos_configuraciones?.opciones ?? ["Opción 1", "Opción 2"]
   );
 
+  const [textValue, setTextValue] = useState<string>(
+    elementos_configuraciones?.valor ?? ""
+  );
+
   const handleAlignment = (valor: string) => {
     setAlignment(valor);
-    configuracion?.("select", valor, size, "", "", options, "");
+    configuracion?.("select", valor, size, textValue, "", options, "");
   };
 
   const handleSize = (valor: string) => {
     setSize(valor);
-    configuracion?.("select", alignment, valor, "", "", options, "");
+    configuracion?.("select", alignment, valor, textValue, "", options, "");
   };
 
   const handleOptions = (valor: string[]) => {
     setOptions(valor);
-    configuracion?.("select", alignment, size, "", "", valor, "");
+    configuracion?.("select", alignment, size, textValue, "", valor, "");
+  };
+
+  const handleText = (valor: string) => {
+    setTextValue(valor);
+    configuracion?.("select", alignment, size, valor, "", options, "");
   };
 
   return (
@@ -341,6 +350,8 @@ export function SelectComponent(props: Props) {
       <select
         className={`border rounded-md p-2 mt-2 ${alignment} ${size}`}
         style={{ color: elementos_configuraciones.color_texto }}
+        onChange={(e) => handleText(e.target.value)}
+        value={textValue}
       >
         {options.map((opt, index) => (
           <option key={index} value={opt}>
@@ -360,22 +371,49 @@ export function CheckboxComponent(props: Props) {
   const [size, setSize] = useState<string>(
     elementos_configuraciones?.size ?? "text-2xl font-bold"
   );
+
   const [lista, setLista] = useState<string[]>(
-    elementos_configuraciones?.opciones ?? [""]
+    elementos_configuraciones?.opciones?.map((opc) => `${opc}|false`) ?? [
+      "nombre|false",
+    ]
   );
+
+  // Agregar nuevo checkbox
+  const agregarNuevo = () => {
+    handleLista([...lista, "|false"]);
+  };
+
+  // Manejar cambio de texto
+  const handleChangeTexto = (index: number, texto: string) => {
+    const newList = [...lista];
+    const [, seleccionado] = newList[index].split("|");
+    newList[index] = `${texto}|${seleccionado}`;
+    handleLista(newList);
+  };
+
+  // Manejar cambio de checkbox
+  const handleChangeSeleccionado = (index: number, checked: boolean) => {
+    const newList = [...lista];
+    const [texto] = newList[index].split("|");
+    newList[index] = `${texto}|${checked}`;
+    handleLista(newList);
+  };
 
   const handleAlignment = (valor: string) => {
     setAlignment(valor);
+
     configuracion?.("checkbox", valor, size, "", "", lista, "");
   };
 
   const handleSize = (valor: string) => {
     setSize(valor);
+
     configuracion?.("checkbox", alignment, valor, "", "", lista, "");
   };
 
   const handleLista = (valor: string[]) => {
     setLista(valor);
+
     configuracion?.("checkbox", alignment, size, "", "", valor, "");
   };
 
@@ -409,47 +447,54 @@ export function CheckboxComponent(props: Props) {
 
           <button
             className="custom-select mt-2 cursor-pointer"
-            onClick={() => handleLista([...lista, ""])}
+            onClick={agregarNuevo}
           >
             Agregar nuevo checkbox
           </button>
         </>
       )}
 
-      {lista.map((_, index) => (
-        <div className="checkbox-radio-container" key={index}>
-          <input type="checkbox" className="mt-2" style={{ width: "18px" }} />
+      {lista.map((item, index) => {
+        const [texto, seleccionado] = item.split("|");
+        return (
+          <div className="checkbox-radio-container" key={index}>
+            <input
+              type="checkbox"
+              className="mt-2"
+              style={{ width: "18px" }}
+              checked={seleccionado === "true"}
+              onChange={(e) =>
+                handleChangeSeleccionado(index, e.currentTarget.checked)
+              }
+            />
 
-          <textarea
-            className={`custom-textarea mt-2 ${alignment} ${size}`}
-            style={{
-              height: "100px",
-              color: elementos_configuraciones.color_texto,
-            }}
-            placeholder="Escribe aquí..."
-            onChange={(e) => {
-              const newList = [...lista];
-              newList[index] = e.currentTarget.value;
-              handleLista(newList);
-            }}
-            value={lista[index]}
-          />
+            <textarea
+              className={`custom-textarea mt-2 ${alignment} ${size}`}
+              style={{
+                height: "100px",
+                color: elementos_configuraciones.color_texto,
+              }}
+              placeholder="Escribe aquí..."
+              value={texto}
+              onChange={(e) => handleChangeTexto(index, e.currentTarget.value)}
+            />
 
-          {!preview && (
-            <>
-              <button
-                onClick={() => {
-                  const newList = lista.filter((_, i) => i !== index);
-                  handleLista(newList);
-                }}
-                className="ml-2 text-red-500 hover:text-red-700"
-              >
-                Eliminar
-              </button>
-            </>
-          )}
-        </div>
-      ))}
+            {!preview && (
+              <>
+                <button
+                  onClick={() => {
+                    const newList = lista.filter((_, i) => i !== index);
+                    handleLista(newList);
+                  }}
+                  className="ml-2 text-red-500 hover:text-red-700"
+                >
+                  Eliminar
+                </button>
+              </>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -462,9 +507,34 @@ export function RadioComponent(props: Props) {
   const [size, setSize] = useState<string>(
     elementos_configuraciones?.size ?? "text-2xl font-bold"
   );
+
   const [lista, setLista] = useState<string[]>(
-    elementos_configuraciones?.opciones ?? [""]
+    elementos_configuraciones?.opciones?.map((opc) => `${opc}|false`) ?? [
+      "nombre|false",
+    ]
   );
+
+  // Agregar nuevo checkbox
+  const agregarNuevo = () => {
+    handleLista([...lista, "|false"]);
+  };
+
+  // Manejar cambio de texto
+  const handleChangeTexto = (index: number, texto: string) => {
+    const newList = [...lista];
+    const [, seleccionado] = newList[index].split("|");
+    newList[index] = `${texto}|${seleccionado}`;
+    handleLista(newList);
+  };
+
+  // Manejar cambio de checkbox
+  const handleChangeSeleccionado = (index: number, checked: boolean) => {
+    const newList = [...lista];
+    const [texto] = newList[index].split("|");
+    newList[index] = `${texto}|${checked}`;
+    handleLista(newList);
+  };
+
   const name: string = `radio-group-${Date.now()}-${Math.random()
     .toString(36)
     .substr(2, 9)}`;
@@ -514,51 +584,55 @@ export function RadioComponent(props: Props) {
 
           <button
             className="custom-select mt-2 cursor-pointer"
-            onClick={() => handleLista([...lista, ""])}
+            onClick={agregarNuevo}
           >
             Agregar nuevo radio
           </button>
         </>
       )}
-      {lista.map((_, index) => (
-        <div className="checkbox-radio-container" key={index}>
-          <input
-            type="radio"
-            className="mt-2"
-            name={`radio-group-${name}`}
-            style={{ width: "18px" }}
-          />
 
-          <textarea
-            className={`custom-textarea mt-2 ${alignment} ${size}`}
-            style={{
-              height: "100px",
-              color: elementos_configuraciones.color_texto,
-            }}
-            placeholder="Escribe aquí..."
-            onChange={(e) => {
-              const newList = [...lista];
-              newList[index] = e.currentTarget.value;
-              handleLista(newList);
-            }}
-            value={lista[index]}
-          />
+      {lista.map((item, index) => {
+        const [texto, seleccionado] = item.split("|");
+        return (
+          <div className="checkbox-radio-container" key={index}>
+            <input
+              type="radio"
+              className="mt-2"
+              name={`radio-group-${name}`}
+              style={{ width: "18px" }}
+              checked={seleccionado === "true"}
+              onChange={(e) =>
+                handleChangeSeleccionado(index, e.currentTarget.checked)
+              }
+            />
 
-          {!preview && (
-            <>
-              <button
-                onClick={() => {
-                  const newList = lista.filter((_, i) => i !== index);
-                  handleLista(newList);
-                }}
-                className="ml-2 text-red-500 hover:text-red-700"
-              >
-                Eliminar
-              </button>
-            </>
-          )}
-        </div>
-      ))}
+            <textarea
+              className={`custom-textarea mt-2 ${alignment} ${size}`}
+              style={{
+                height: "100px",
+                color: elementos_configuraciones.color_texto,
+              }}
+              placeholder="Escribe aquí..."
+              value={texto}
+              onChange={(e) => handleChangeTexto(index, e.currentTarget.value)}
+            />
+
+            {!preview && (
+              <>
+                <button
+                  onClick={() => {
+                    const newList = lista.filter((_, i) => i !== index);
+                    handleLista(newList);
+                  }}
+                  className="ml-2 text-red-500 hover:text-red-700"
+                >
+                  Eliminar
+                </button>
+              </>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -76,17 +76,28 @@ function Menu() {
         </div>
       ) : (
         <div id="mainContent">
-          {/* Botón flotante pequeño y elegante */}
           <button
             ref={buttonRef}
-            onClick={() => setOpen(!open)}
+            onClick={() => {
+              if (
+                !personalizar &&
+                !copiar_filas &&
+                !eliminar_filas &&
+                !ajuste_columna &&
+                !mover_columna
+              ) {
+                setOpen(!open);
+              } else {
+                handleAlerta(
+                  "⚠️ Existe otra acción seleccionada. Cancela la acción actual para poder realizar esta nueva."
+                );
+              }
+            }}
             title="Configuraciones"
             className="fixed bottom-4 right-4 z-50 bg-indigo-600 text-white p-3 rounded-full shadow-md hover:bg-indigo-700 transition flex items-center justify-center"
           >
             <i className={`fas ${open ? "fa-ban" : "fa-cog"} text-lg`}></i>
           </button>
-
-          {/* Panel superior compacto */}
 
           {visualizar ? (
             <>
